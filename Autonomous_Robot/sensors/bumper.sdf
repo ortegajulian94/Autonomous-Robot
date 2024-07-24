@@ -1,0 +1,44 @@
+<link name="bumper_link">
+  <visual>
+    <origin xyz="-.3 .36 0" rpy="${pi/2} 0 0"/>
+    <geometry>
+      <mesh
+          filename="file://$(find tutorial_package)/oldmeshes/bumper.STL" />
+    </geometry>
+  </visual>
+  <collision>
+    <origin xyz="-.3 .36 0" rpy="${pi/2} 0 0"/>
+    <geometry>
+      <mesh
+          filename="file://$(find tutorial_package)/oldmeshes/bumper.STL" />
+    </geometry>
+  </collision>
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.035"/>
+    <inertia ixx="0.001"  ixy="0"  ixz="0" iyy="0" iyz="0" izz="0.001" />
+  </inertial>
+</link>
+
+<joint name="bumper_joint" type="fixed">
+  <parent link="base_link"/>
+  <child link="bumper_link"/>
+  <origin xyz="0 0 0" rpy="0 0 0"/>
+</joint>
+
+<gazebo reference="bumper_link">
+    <sensor name="bumper" type="contact">
+        <always_on>true</always_on>
+        <update_rate>50</update_rate>
+        <contact>
+            <collision>base_link_fixed_joint_lump__bumper_link_collision_1</collision>
+        </contact>
+        <plugin name="bumper" filename="libgazebo_ros_bumper.so">
+            <ros>
+                <namespace>tss</namespace>
+                <remapping>bumper_states:=bumper_demo</remapping>
+            </ros>
+            <frame_name>bumper_link</frame_name>
+        </plugin>
+    </sensor>
+</gazebo>
